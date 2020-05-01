@@ -1,6 +1,6 @@
 package com.example.websocketdemo.screenplay.actions;
 
-import com.example.e2e.screenplay.page.StartPage;
+import com.example.websocketdemo.screenplay.page.StartPage;
 import com.example.websocketdemo.model.ChatMessage;
 import com.example.websocketdemo.screenplay.abilities.ConnectToChatViaWebsocket;
 import com.example.websocketdemo.screenplay.actor.Memories;

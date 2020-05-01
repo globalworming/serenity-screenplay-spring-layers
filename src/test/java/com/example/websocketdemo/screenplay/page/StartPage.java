@@ -1,4 +1,4 @@
-package com.example.e2e.screenplay.page;
+package com.example.websocketdemo.screenplay.page;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.DefaultUrl;

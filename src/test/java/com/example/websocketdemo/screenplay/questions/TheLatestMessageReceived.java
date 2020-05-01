@@ -26,6 +26,7 @@ public class TheLatestMessageReceived extends QuestionWithDefaultSubject<ChatMes
       if (message.containsText(" joined!")) {
         return ChatMessage.join(StringUtils.left(message.getText(), message.getText().length() - " joined!".length()));
       }
+      return ChatMessage.chat(message.thenFind("span").getText(), message.thenFind("p").getText());
     }
 
     throw new NoMatchingAbilityException(this.getClass().getSimpleName());
