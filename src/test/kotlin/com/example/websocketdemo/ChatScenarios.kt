@@ -1,4 +1,4 @@
-package com.example.websocketdemo.chat
+package com.example.websocketdemo
 
 import com.example.websocketdemo.model.ChatMessage
 import com.example.websocketdemo.screenplay.actions.EnableSwearWordFilter

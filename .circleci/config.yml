@@ -43,7 +43,7 @@ jobs:
           background: true
 
       # run tests!
-      - run: mvn clean verify -P it -Dproperties=`pwd`/serenity-integration.properties
+      - run: mvn clean verify -Dproperties=`pwd`/serenity-integration.properties
 
       - run:
           name: Save test results
@@ -56,16 +56,6 @@ jobs:
       - store_artifacts:
           path: ~/test-results/junit
 
-      - run:
-          name: Save test results
-          command: |
-            rm -rf ./target/site/serenity/fontawesome-free-5.7.2-web
-            cp -r ./target/site/serenity ~/test-results/
-          when: always
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results/serenity
 
       - store_artifacts:
           path: selenium-log/
