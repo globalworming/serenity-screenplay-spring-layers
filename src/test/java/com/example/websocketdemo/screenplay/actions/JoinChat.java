@@ -1,9 +1,16 @@
 package com.example.websocketdemo.screenplay.actions;
 
+import com.example.e2e.screenplay.page.StartPage;
 import com.example.websocketdemo.model.ChatMessage;
+import com.example.websocketdemo.screenplay.abilities.ConnectToChatViaWebsocket;
 import com.example.websocketdemo.screenplay.actor.Memories;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.NoMatchingAbilityException;
 import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Open;
+import org.openqa.selenium.Keys;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -20,28 +27,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
-public class ConnectsToWebsocket implements Performable {
-  private final int port;
-
-  public ConnectsToWebsocket(int port) {
-    this.port = port;
-  }
-
-  public static ConnectsToWebsocket onPort(int port) {
-    return instrumented(ConnectsToWebsocket.class, port);
-  }
-
+public class JoinChat implements Performable {
   @Override
   public <T extends Actor> void performAs(T actor) {
+    if (actor.abilityTo(ConnectToChatViaWebsocket.class) != null) {
+      connectViaWebsocket(actor);
+      return;
+    }
+    if (actor.abilityTo(BrowseTheWeb.class) != null) {
+      actor.attemptsTo(Open.browserOn(new StartPage()));
+      actor.attemptsTo(Enter.theValue(actor.getName())
+          .into(".e2e-name-input")
+          .thenHit(Keys.ENTER));
+      return;
+    }
+    throw new NoMatchingAbilityException(this.getClass().getSimpleName());
+  }
+
+
+  private <T extends Actor> void connectViaWebsocket(T actor) {
     WebSocketClient simpleWebSocketClient = new StandardWebSocketClient();
     List<Transport> transports = new ArrayList<>(1);
     transports.add(new WebSocketTransport(simpleWebSocketClient));
     SockJsClient sockJsClient = new SockJsClient(transports);
     WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
     stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-    String url = "ws://localhost:" + port + "/ws";
+    String url = actor.recall("websocket.url");
     MyStompSessionHandler sessionHandler = new MyStompSessionHandler(actor);
     try {
       stompClient.connect(url, sessionHandler).get();
