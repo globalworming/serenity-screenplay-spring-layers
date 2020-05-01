@@ -1,10 +1,18 @@
-## example on how to integrate serenity bdd screenplay pattern into spring testing
+### same steps for different UIs with Serenity BDD
 
-this includes integration testing of the [ChatController](src/test/java/com/example/websocketdemo/controller/ChatControllerTest.java)
+With the screenplay pattern it is possible to use the same test steps with different implementations (controlled by abilities) to test different UIs. Especially with spring you can run e2e tests against the service layer directly, against the web layer or against the browser.
+This example is one way of leveraging actors and abilities.
+I've implemented the websocket and browser side of things.  
+[BrowserIntegrationTest](src/test/kotlin/com/example/websocketdemo/chat/BrowserIntegrationTest.kt)  
+[EmbeddedWebserverIntegrationTest](src/test/kotlin/com/example/websocketdemo/chat/EmbeddedWebserverIntegrationTest.kt)  
+both use the steps defined in the [ChatScenarios](src/test/kotlin/com/example/websocketdemo/chat/ChatScenarios.kt) so you got a single file where you can describe intended behavior. Looks a little un-DRY but this way you can create a single report for both UIs and mark specific tests as pending or ignored or don't implement them at all. The alternative might be a UI parameter and using `Assume` to decide if a test should run.  
 
-and [end-to-end testing](src/test/java/com/example/e2e/testcases/chat) with multiple actors
+_Is it fancy?_ I guess.  
+_Is it easy?_ I guess not so much.   
+_Is it useful?_ Maybe? Why start automated tests against a browser when you are not sure that the backend is behaving as intended. And when you have more UIs (like REST, CLI...) you can with a single step description ensure the same behavior over all UIs.
 
-circleci build [![CircleCI](https://circleci.com/gh/globalworming/serenity-screenplay-multi-user-example/tree/master.svg?style=svg)](https://circleci.com/gh/globalworming/serenity-screenplay-multi-user-example/tree/master)
+
+circleci build [![CircleCI](https://circleci.com/gh/globalworming/serenity-screenplay-spring-layers/tree/master.svg?style=svg)](https://circleci.com/gh/globalworming/serenity-screenplay-spring-layers/tree/master)
 
 ## Requirements
 
