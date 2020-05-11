@@ -3,8 +3,8 @@
 With the screenplay pattern it is possible to use the same test steps with different implementations (controlled by abilities) to test different UIs. Especially with spring you can run e2e tests against the service layer directly, against the web layer or against the browser.
 This example is one way of leveraging actors and abilities.
 I've implemented the websocket and browser side of things.  
-[BrowserIT](src/test/kotlin/com/example/websocketdemo/chat/BrowserIT.kt)  
-[WebsocketIT](src/test/kotlin/com/example/websocketdemo/chat/WebsocketIT.kt)  
+[BrowserIT](https://github.com/globalworming/serenity-screenplay-spring-layers/blob/master/src/test/kotlin/com/example/websocketdemo/chat/BrowserIT.kt)  
+[WebsocketIT](https://github.com/globalworming/serenity-screenplay-spring-layers/blob/master/src/test/kotlin/com/example/websocketdemo/chat/WebsocketIT.kt)  
 both use the steps defined in the [ChatScenarios](src/test/kotlin/com/example/websocketdemo/chat/ChatScenarios.kt) so you got a single file where you can describe intended behavior. Looks a little un-DRY but this way you can create a single report for both UIs and mark specific tests as pending or ignored or don't implement them at all. The alternative might be a UI parameter and using `Assume` to decide if a test should run. See [BotcHappyPathIT.kt](https://github.com/globalworming/botc-e2e/blob/v0.1.1/src/test/kotlin/com/headissue/botc_unofficial/e2e/test/happy/BotcHappyPathIT.kt) for an example how this could look like.
 
 _Is it fancy?_ I guess.  
